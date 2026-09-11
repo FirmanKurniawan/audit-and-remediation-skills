@@ -1,16 +1,53 @@
 ---
-name: universal-code-audit
-description: >-
+name: universal-audit-skill
+description: |
   Platform-agnostic, evidence-based audit of any software repository (web,
   backend/API, mobile, desktop, embedded/IoT, data/ML, CLI, infrastructure, or
   hybrid monorepos). Auto-detects the stack, selects applicable standards
   (OWASP ASVS/MASVS/Top 10, CWE, ISO/IEC 25010:2023, Sonar way, SSDF/SLSA/SBOM,
   WCAG, privacy regimes), produces a machine-validated findings ledger, and
-  writes BUG_ANALYSIS.md and PRODUCT_FEATURE_ANALYSIS.md. Use for code audits,
-  security reviews, QA assessments, bug analysis, technical-debt reviews,
-  release-readiness checks, and product gap analysis. ANALYSIS ONLY — it never
-  modifies application source code; fixing is universal-remediation-skill.
-license: MIT
+  writes BUG_ANALYSIS.md and PRODUCT_FEATURE_ANALYSIS.md.
+
+  Use this skill whenever the user asks to "audit this repository",
+  "security review", "QA assessment", "code audit", "bug analysis",
+  "technical-debt review", "release-readiness check", or "product gap analysis".
+
+  ANALYSIS ONLY — never modifies application source code. For fixing
+  validated findings, use the sibling `universal-remediation-skill`.
+  Do NOT use this skill for live debugging, hot-fixes, or one-off code tweaks.
+descriptions:
+  id-ID: |
+    Audit repository software berbasis bukti dan agnostic terhadap platform
+    (web, backend/API, mobile, desktop, embedded/IoT, data/ML, CLI,
+    infrastructure, atau monorepo hybrid). Mendeteksi stack secara otomatis,
+    memilih standar yang relevan (OWASP ASVS/MASVS/Top 10, CWE,
+    ISO/IEC 25010:2023, Sonar way, SSDF/SLSA/SBOM, WCAG, rezim privasi),
+    menghasilkan ledger temuan yang divalidasi oleh script, dan menulis
+    BUG_ANALYSIS.md serta PRODUCT_FEATURE_ANALYSIS.md.
+
+    Gunakan skill ini ketika user meminta "audit repository ini",
+    "tinjauan keamanan", "asesmen QA", "analisis bug", "tinjauan technical
+    debt", "cekap kesiapan rilis", atau "analisis kesenjangan produk".
+
+    HANYA ANALISIS — tidak pernah mengubah kode sumber aplikasi. Untuk
+    memperbaiki temuan yang sudah tervalidasi, gunakan skill saudara
+    `universal-remediation-skill`. Jangan gunakan skill ini untuk debugging
+    langsung, hot-fix, atau perubahan kode satu kali.
+  zh-Hans: |
+    平台无关、基于证据的软件仓库审计（web、后端/API、移动、桌面、嵌入式/IoT、
+    数据/ML、CLI、基础设施或混合 monorepo）。自动识别技术栈、选择适用的标准
+    （OWASP ASVS/MASVS/Top 10、CWE、ISO/IEC 25010:2023、Sonar way、SSDF/SLSA/
+    SBOM、WCAG、隐私法规），生成由脚本验证的发现分类账，并写入 BUG_ANALYSIS.md
+    与 PRODUCT_FEATURE_ANALYSIS.md。
+
+    当用户要求"审计此仓库"、"安全审查"、"QA 评估"、"代码审计"、"缺陷分析"、
+    "技术债审查"、"发布就绪检查"或"产品差距分析"时使用本 skill。
+
+    仅做分析 — 永不修改应用程序源代码。修复已验证的发现请使用同级 skill
+    `universal-remediation-skill`。不要用于在线调试、紧急修复或单次代码调整。
+displayNames:
+  id-ID: Audit Kode Universal
+  zh-Hans: 通用代码审计
 version: 2.0.0
 pipeline_version: 2.0.0
 ---

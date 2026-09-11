@@ -23,10 +23,14 @@ same vocabulary — exactly the drift this design exists to prevent.
 
 ## Install
 
+Pick the agent platform you use.
+
+### Claude Code / Claude Cowork
+
 ```bash
 git clone <this-repo> ~/src/audit-skills
 
-# expose both skills to your agent (adjust the skills directory to your tool)
+# expose both skills to your agent
 mkdir -p ~/.claude/skills
 ln -s ~/src/audit-skills/universal-audit-skill        ~/.claude/skills/universal-code-audit
 ln -s ~/src/audit-skills/universal-remediation-skill  ~/.claude/skills/universal-remediation
@@ -35,15 +39,44 @@ ln -s ~/src/audit-skills/universal-remediation-skill  ~/.claude/skills/universal
 Symlinks keep the two side by side on disk, which the sibling-path lookups
 depend on. Then ask: *"Audit this repository."*
 
+### MiniMax Code / Mavis
+
+```powershell
+git clone <this-repo> C:\Users\<you>\src\audit-skills
+
+# user-global install — visible to every agent on this profile
+$Skills = Join-Path $env:USERPROFILE '.minimax\skills'
+New-Item -ItemType Junction -Path (Join-Path $Skills 'universal-audit-skill')      -Target 'C:\Users\<you>\src\audit-skills\universal-audit-skill'
+New-Item -ItemType Junction -Path (Join-Path $Skills 'universal-remediation-skill') -Target 'C:\Users\<you>\src\audit-skills\universal-remediation-skill'
+```
+
+Junctions are the Windows equivalent of symlinks — they keep both skills
+side by side without duplicating files, so the remediation skill's
+sibling-path lookups still resolve. **Open a new chat after this** — Mavis
+only picks up newly installed skills on the next session.
+
+On macOS / Linux with Mavis, the same layout uses `~/.mavis/skills/` and
+`ln -s` exactly like the Claude block above.
+
 Prefer a plain prompt? `universal-audit-skill/prompts/MASTER_PROMPT.md`
 (English) or `MASTER_PROMPT.id.md` (Bahasa Indonesia).
 
 ## Verify the install
 
+### macOS / Linux / WSL
+
 ```bash
-cd universal-audit-skill
+cd ~/src/audit-skills/universal-audit-skill
 python3 tests/make_fixtures.py --clean
 python3 tests/run_tests.py
+```
+
+### Windows / PowerShell
+
+```powershell
+cd C:\Users\<you>\src\audit-skills\universal-audit-skill
+py tests\make_fixtures.py --clean
+py tests\run_tests.py
 ```
 
 Expect **85 PASS, 0 FAIL, 1 NOT_EXECUTED**. The one not executed is the agent
