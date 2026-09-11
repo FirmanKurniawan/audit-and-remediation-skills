@@ -61,6 +61,43 @@ On macOS / Linux with Mavis, the same layout uses `~/.mavis/skills/` and
 Prefer a plain prompt? `universal-audit-skill/prompts/MASTER_PROMPT.md`
 (English) or `MASTER_PROMPT.id.md` (Bahasa Indonesia).
 
+## MCP server (Claude Code, Cursor, Continue, Claude Desktop)
+
+The `mcp/` directory contains a thin stdio MCP server that wraps the
+audit skill's deterministic Python validators as tools. It is independent
+of the MiniMax Code plugin and works with any MCP-compatible host.
+
+| Tool | Wraps |
+|---|---|
+| `audit_list_components`     | (informational) |
+| `audit_validate_findings`   | `universal-audit-skill/scripts/validate-findings.py` |
+| `audit_validate_manifest`   | `universal-audit-skill/scripts/validate-manifest.py` |
+| `audit_quality_gate`        | `universal-audit-skill/scripts/quality-gate.py` |
+
+See [`mcp/README.md`](mcp/README.md) for full install instructions.
+
+### Claude Code (CLI)
+
+```bash
+claude mcp add audit-and-remediation -- node ~/src/audit-skills/mcp/server.js
+```
+
+### Claude Desktop / Cursor / Continue
+
+Edit your host's MCP config and add:
+
+```json
+{
+  "mcpServers": {
+    "audit-and-remediation": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["C:/Users/<you>/src/audit-skills/mcp/server.js"]
+    }
+  }
+}
+```
+
 ## Verify the install
 
 ### macOS / Linux / WSL

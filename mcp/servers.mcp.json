@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "mcpServers": {
+    "audit-and-remediation": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./server.js"],
+      "env": {},
+      "description": "Wraps the universal-audit-skill Python validators (validate-findings, validate-manifest, quality-gate) as MCP tools. Audit orchestration stays with the agent via SKILL.md.",
+      "timeout": 30000
+    }
+  }
+}
