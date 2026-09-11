@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/universal-audit-skill/schemas/finding.schema.json",
+  "title": "Audit finding",
+  "description": "One finding from universal-audit-skill. Security-specific fields live under mappings and are optional for non-security classes; do not populate a field with an invented value to satisfy the shape — use 'Not Applicable' where the vocabulary allows it.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "id",
+    "fingerprint",
+    "audited_commit",
+    "component",
+    "finding_class",
+    "category",
+    "title",
+    "severity",
+    "priority",
+    "confidence",
+    "epistemic",
+    "status",
+    "evidence",
+    "reachability",
+    "reproduction",
+    "impact",
+    "root_cause",
+    "remediation",
+    "verification",
+    "effort"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^BUG-\\d{3,}$"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$",
+      "description": "Derived, never authored. See references/fingerprinting.md."
+    },
+    "audited_commit": {
+      "type": "string",
+      "minLength": 7
+    },
+    "component": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platform": {
+      "type": "string"
+    },
+    "finding_class": {
+      "enum": [
+        "security",
+        "privacy",
+        "regulatory",
+        "supply_chain",
+        "functional",
+        "reliability",
+        "concurrency",
+        "performance",
+        "maintainability",
+        "accessibility",
+        "observability",
+        "build_config",
+        "test_gap"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 8
+    },
+    "severity": {
+      "enum": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low",
+        "Informational"
+      ]
+    },
+    "priority": {
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ]
+    },
+    "priority_rationale": {
+      "type": "string"
+    },
+    "confidence": {
+      "enum": [
+        "Confirmed",
+        "Highly Likely",
+        "Potential",
+        "Needs Runtime Verification",
+        "False Positive",
+        "Not Applicable"
+      ]
+    },
+    "epistemic": {
+      "enum": [
+        "Fact",
+        "Inference",
+        "Assumption"
+      ]
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "VERIFIED_FINDING",
+        "READY_FOR_FIX",
+        "REPRODUCED",
+        "FIX_IN_PROGRESS",
+        "FIX_IMPLEMENTED",
+        "VERIFICATION_PASSED",
+        "REGRESSION_PASSED",
+        "RE_AUDIT_PASSED",
+        "VERIFIED_FIXED",
+        "REGRESSED",
+        "WONT_FIX",
+        "SUPERSEDED",
+        "DUPLICATE",
+        "FALSE_POSITIVE"
+      ]
+    },
+    "effort": {
+      "enum": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "line_start",
+          "line_end",
+          "verified_at"
+        ],
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "line_start": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "line_end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "excerpt_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "verified_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "code",
+              "command_output",
+              "analyzer",
+              "log",
+              "config",
+              "document",
+              "reproduction",
+              "absence",
+              "runtime_record"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "search_command": {
+            "type": "string",
+            "description": "Required in spirit for type=absence: the search that would have found the thing claimed missing."
+          }
+        }
+      }
+    },
+    "reachability": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "Confirmed",
+            "Unconfirmed",
+            "Unreachable",
+            "Not Applicable"
+          ]
+        },
+        "entry_point": {
+          "type": "string"
+        },
+        "caller_chain": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "reproduction": {
+      "type": "object",
+      "required": [
+        "status",
+        "expected",
+        "observed"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "Reproduced",
+            "Not Reproduced",
+            "Not Attempted",
+            "Blocked",
+            "Static Only"
+          ]
+        },
+        "procedure": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected": {
+          "type": "string"
+        },
+        "observed": {
+          "type": "string"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "procedure",
+        "expected_evidence",
+        "level"
+      ],
+      "properties": {
+        "procedure": {
+          "type": "string"
+        },
+        "expected_evidence": {
+          "type": "string"
+        },
+        "level": {
+          "enum": [
+            "static",
+            "unit",
+            "integration",
+            "runtime",
+            "manual"
+          ]
+        }
+      }
+    },
+    "remediation": {
+      "type": "object",
+      "required": [
+        "strategy"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string"
+        },
+        "minimal_patch_hint": {
+          "type": "string"
+        },
+        "regression_surface": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_tests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "impact": {
+      "type": "string",
+      "minLength": 8
+    },
+    "root_cause": {
+      "type": "string",
+      "minLength": 8
+    },
+    "mappings": {
+      "type": "object",
+      "properties": {
+        "cwe": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CWE-\\d+$"
+          }
+        },
+        "cve": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cvss": {
+          "oneOf": [
+            {
+              "const": "Not Scored — Insufficient Evidence"
+            },
+            {
+              "const": "Not Applicable"
+            },
+            {
+              "type": "object",
+              "required": [
+                "vector"
+              ],
+              "properties": {
+                "version": {
+                  "enum": [
+                    "3.1",
+                    "4.0"
+                  ]
+                },
+                "vector": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "assumed_metrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "epss": {
+          "oneOf": [
+            {
+              "const": "Not Applicable"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          ],
+          "description": "Only meaningful when mappings.cve contains a CVE."
+        },
+        "kev": {
+          "oneOf": [
+            {
+              "const": "Not Applicable"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "description": "Only meaningful when mappings.cve contains a CVE."
+        },
+        "owasp": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "asvs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maswe": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "iso25010": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sonar": {
+          "type": "string"
+        }
+      }
+    },
+    "regulatory": {
+      "type": "object",
+      "required": [
+        "regime",
+        "applicability",
+        "rationale",
+        "finding_type"
+      ],
+      "properties": {
+        "regime": {
+          "type": "string"
+        },
+        "applicability": {
+          "enum": [
+            "Applicable",
+            "Potentially Applicable",
+            "Not Applicable",
+            "Applicability Unconfirmed"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "finding_type": {
+          "enum": [
+            "Potential Compliance Gap",
+            "Control Gap With Evidence",
+            "Observation",
+            "Not Applicable"
+          ]
+        },
+        "article_reference": {
+          "type": "string"
+        }
+      }
+    },
+    "blocks_features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^FEAT-\\d{3,}$"
+      }
+    },
+    "duplicate_of": {
+      "type": "string"
+    },
+    "superseded_by": {
+      "type": "string"
+    },
+    "fix_record": {
+      "type": "string"
+    },
+    "first_seen_commit": {
+      "type": "string"
+    }
+  }
+}

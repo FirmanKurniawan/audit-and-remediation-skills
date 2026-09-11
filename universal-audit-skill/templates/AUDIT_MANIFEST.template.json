@@ -1,0 +1,122 @@
+{
+  "schema_version": "2.0",
+  "project_name": "",
+  "audit_date": "",
+  "pipeline_version": "2.0.0",
+  "mode": "full|security-only|product-only|quick-triage|delta",
+  "git": {
+    "commit": "",
+    "branch": "",
+    "working_tree": "clean|dirty|not-a-repo",
+    "uncommitted_files": 0
+  },
+  "tier": {
+    "level": "T1|T2|T3",
+    "justification": "",
+    "sampling_rule": "",
+    "excluded_paths": []
+  },
+  "consent": {
+    "controlled_execution": false,
+    "network_access": false,
+    "runtime_environment": "none|emulator|device|staging|production-readonly",
+    "recorded_at": "",
+    "granted_by": ""
+  },
+  "components": [
+    {
+      "name": "",
+      "path": "",
+      "platform": "web-frontend|backend-api|mobile-android|mobile-ios|mobile-cross|desktop|cli-library|embedded-iot|data-ml|infra|game",
+      "languages": [],
+      "build_system": "",
+      "entry_point": "",
+      "primary_marker": "path/to/marker-file",
+      "confidence": "Confirmed|Likely|Uncertain",
+      "in_scope": true
+    }
+  ],
+  "product_shape": "single-platform|hybrid|monorepo|shared-core|full-stack",
+  "context_triggers": {
+    "handles_personal_data": false,
+    "data_subject_jurisdictions": [],
+    "handles_payments": false,
+    "handles_health_data": false,
+    "eu_market_product": false,
+    "public_facing_ui": false,
+    "safety_relevant": false,
+    "ships_ml_model": false,
+    "app_store_distributed": false
+  },
+  "standards_selected": [
+    {
+      "name": "",
+      "version": "",
+      "publisher": "",
+      "url": "",
+      "accessed": "",
+      "verification_status": "Verified|Unverified|Unreachable",
+      "applicability": "Applicable|Potentially Applicable|Not Applicable|Applicability Unconfirmed",
+      "trigger": "",
+      "limitations": ""
+    }
+  ],
+  "standards_excluded": [
+    { "name": "", "reason": "" }
+  ],
+  "threat_model": {
+    "assets": [],
+    "actors": [],
+    "entry_points": [],
+    "trust_boundaries": [],
+    "worst_credible_outcome": ""
+  },
+  "environment": {
+    "toolchain_versions": {},
+    "missing_configuration": [],
+    "isolation": "container|vm|host|unknown"
+  },
+  "executed_commands": [
+    {
+      "step": "",
+      "command": "",
+      "command_class": "SAFE_READ_ONLY|CONTROLLED_EXECUTION|REQUIRES_CONSENT",
+      "working_directory": "",
+      "environment_assumptions": [],
+      "result": "Passed|Passed with warnings|Partial|Failed|Not Executed|Blocked|Not Applicable",
+      "exit_code": null,
+      "duration_seconds": 0,
+      "evidence": ".audit/evidence/<step>.txt",
+      "repo_state": {
+        "before": { "commit": "", "branch": "", "dirty_files": 0, "tracked_hash": "" },
+        "after": { "commit": "", "branch": "", "dirty_files": 0, "tracked_hash": "" },
+        "source_modified": false,
+        "modified_paths": []
+      },
+      "source_change_rationale": "",
+      "notes": ""
+    }
+  ],
+  "runtime_verifications": [
+    {
+      "finding_id": "BUG-000",
+      "environment": "",
+      "device_or_platform": "",
+      "timestamp": "",
+      "prerequisites": [],
+      "command": "",
+      "exit_code": null,
+      "expected": "",
+      "observed": "",
+      "result": "PASS|FAIL|BLOCKED|NOT_EXECUTED|INCONCLUSIVE",
+      "artifact_path": "",
+      "artifact_sha256": "",
+      "operator": ""
+    }
+  ],
+  "validation_exceptions": [
+    { "rule": "", "rationale": "", "approved_by": "" }
+  ],
+  "not_verified": [],
+  "release_recommendation": "NOT ASSESSED"
+}

@@ -1,0 +1,6 @@
+.audit/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+universal-audit-skill/tests/last-run.json

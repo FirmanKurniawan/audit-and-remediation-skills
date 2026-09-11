@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/universal-remediation-skill/schemas/fix-record.schema.json",
+  "title": "Fix record",
+  "description": "One remediation pass over one finding. scripts/validate-fix.py is the enforcing implementation; this schema is for external tooling.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version", "finding_id", "original_fingerprint", "baseline_commit",
+    "changed_files", "patch_summary", "root_cause", "reproduction_before",
+    "verification_after", "build_result", "targeted_tests", "regression_result",
+    "rollback_procedure", "status"
+  ],
+  "$defs": {
+    "runResult": {
+      "type": "object",
+      "required": ["result"],
+      "properties": {
+        "result": { "enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED", "INCONCLUSIVE"] },
+        "command": { "type": "string" },
+        "exit_code": { "type": ["integer", "null"] },
+        "expected": { "type": "string" },
+        "observed": { "type": "string" },
+        "iterations": { "type": "integer", "minimum": 1 },
+        "environment": { "type": "string" },
+        "artifact_path": { "type": "string" },
+        "artifact_sha256": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": { "const": "2.0" },
+    "finding_id": { "type": "string", "pattern": "^BUG-\\d{3,}$" },
+    "original_fingerprint": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+    "baseline_commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+    "branch": { "type": "string" },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "requested_at": { "type": "string" },
+        "granted_by": { "type": "string" },
+        "scope": { "type": "string" },
+        "may_commit": { "type": "boolean" },
+        "may_run_tests": { "type": "boolean" }
+      }
+    },
+    "root_cause": { "type": "string", "minLength": 8 },
+    "blast_radius": {
+      "type": "object",
+      "properties": {
+        "callers": { "type": "array", "items": { "type": "string" } },
+        "dependents": { "type": "array", "items": { "type": "string" } },
+        "public_interfaces": { "type": "array", "items": { "type": "string" } },
+        "behavioural_contracts": { "type": "array", "items": { "type": "string" } },
+        "covering_tests": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "fix_plan": {
+      "type": "object",
+      "properties": {
+        "approach": { "type": "string" },
+        "files_to_change": { "type": "array", "items": { "type": "string" } },
+        "expected_lines": { "type": "integer", "minimum": 0 },
+        "expected_diff_shape": { "type": "string" },
+        "interface_changes": { "type": "string" },
+        "data_migration": { "type": "string" },
+        "backward_compatibility": { "type": "string" },
+        "feature_flag": { "type": "string" },
+        "tests_to_add": { "type": "array", "items": { "type": "string" } },
+        "rejected_alternatives": { "type": "array", "items": { "type": "string" } },
+        "recorded_before_first_edit": { "type": "boolean" }
+      }
+    },
+    "changed_files": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "scope_justification": {
+      "description": "Map of file -> reason, or a list of {file, reason}. Required for every file beyond the one holding the root cause.",
+      "oneOf": [
+        { "type": "object", "additionalProperties": { "type": "string" } },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["file", "reason"],
+            "properties": { "file": { "type": "string" }, "reason": { "type": "string" } }
+          }
+        }
+      ]
+    },
+    "dependency_change_rationale": { "type": "string" },
+    "patch_summary": { "type": "string", "minLength": 8 },
+    "patch_path": { "type": "string" },
+    "patch_excerpt": { "type": "string" },
+    "patch_stats": {
+      "type": "object",
+      "properties": {
+        "files": { "type": "integer" },
+        "lines_changed": { "type": "integer" },
+        "insertions": { "type": "integer" },
+        "deletions": { "type": "integer" }
+      }
+    },
+    "reproduction_before": { "$ref": "#/$defs/runResult" },
+    "reproduction_waiver": { "type": "string" },
+    "verification_after": { "$ref": "#/$defs/runResult" },
+    "build_result": {
+      "enum": ["Passed", "Passed with warnings", "Partial", "Failed",
+               "Not Executed", "Blocked", "Not Applicable"]
+    },
+    "targeted_tests": {
+      "allOf": [{ "$ref": "#/$defs/runResult" }],
+      "properties": {
+        "names": { "type": "array", "items": { "type": "string" } },
+        "baseline_result": {
+          "enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED", "INCONCLUSIVE"],
+          "description": "The new regression test run against the baseline commit. It must FAIL there, or it tests nothing."
+        }
+      }
+    },
+    "regression_result": { "enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED", "INCONCLUSIVE"] },
+    "regression": {
+      "type": "object",
+      "properties": {
+        "scope": { "type": "string" },
+        "baseline_failures": { "type": "array", "items": { "type": "string" } },
+        "current_failures": { "type": "array", "items": { "type": "string" } },
+        "accepted_failures": { "type": "array", "items": { "type": "string" } },
+        "artifact_path": { "type": "string" }
+      }
+    },
+    "runtime_result": { "enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED", "INCONCLUSIVE"] },
+    "re_audit": {
+      "allOf": [{ "$ref": "#/$defs/runResult" }],
+      "properties": {
+        "audited_commit": { "type": "string" },
+        "finding_still_derived": { "type": "boolean" },
+        "validation_result_path": { "type": "string" }
+      }
+    },
+    "new_candidate_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "summary": { "type": "string" },
+          "fixed_here": {
+            "type": "boolean",
+            "description": "Must be false. New defects go back to the audit, they are not fixed opportunistically."
+          }
+        }
+      }
+    },
+    "remaining_risks": { "type": "string" },
+    "rollback_procedure": { "type": "string", "minLength": 8 },
+    "resulting_commit": { "type": "string" },
+    "status": {
+      "enum": ["READY_FOR_FIX", "REPRODUCED", "FIX_IN_PROGRESS", "FIX_IMPLEMENTED",
+               "VERIFICATION_PASSED", "REGRESSION_PASSED", "RE_AUDIT_PASSED",
+               "VERIFIED_FIXED", "REGRESSED"]
+    },
+    "operator": { "type": "string" },
+    "completed_at": { "type": "string" }
+  }
+}

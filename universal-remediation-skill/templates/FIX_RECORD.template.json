@@ -1,0 +1,100 @@
+{
+  "schema_version": "2.0",
+  "finding_id": "BUG-000",
+  "original_fingerprint": "0000000000000000",
+  "baseline_commit": "",
+  "branch": "fix/BUG-000",
+  "consent": {
+    "requested_at": "",
+    "granted_by": "",
+    "scope": "BUG-000",
+    "may_commit": false,
+    "may_run_tests": false
+  },
+  "root_cause": "The mechanism, stated so another engineer could predict the bug from the code.",
+  "blast_radius": {
+    "callers": [],
+    "dependents": [],
+    "public_interfaces": [],
+    "behavioural_contracts": [],
+    "covering_tests": []
+  },
+  "fix_plan": {
+    "approach": "",
+    "files_to_change": [],
+    "expected_lines": 0,
+    "expected_diff_shape": "",
+    "interface_changes": "none",
+    "data_migration": "none",
+    "backward_compatibility": "",
+    "feature_flag": "none",
+    "tests_to_add": [],
+    "rejected_alternatives": [],
+    "recorded_before_first_edit": true
+  },
+  "changed_files": [],
+  "scope_justification": {},
+  "dependency_change_rationale": "",
+  "patch_summary": "",
+  "patch_path": ".audit/fixes/BUG-000.patch",
+  "patch_stats": { "files": 0, "lines_changed": 0, "insertions": 0, "deletions": 0 },
+
+  "reproduction_before": {
+    "result": "FAIL",
+    "command": "",
+    "exit_code": null,
+    "expected": "",
+    "observed": "",
+    "iterations": 1,
+    "environment": "",
+    "artifact_path": ".audit/evidence/BUG-000-before.log",
+    "artifact_sha256": "",
+    "timestamp": ""
+  },
+  "reproduction_waiver": "",
+
+  "verification_after": {
+    "result": "NOT_EXECUTED",
+    "command": "same command as reproduction_before — never a different one",
+    "exit_code": null,
+    "expected": "",
+    "observed": "",
+    "iterations": 1,
+    "environment": "",
+    "artifact_path": ".audit/evidence/BUG-000-after.log",
+    "artifact_sha256": "",
+    "timestamp": ""
+  },
+
+  "build_result": "Not Executed",
+  "targeted_tests": {
+    "result": "NOT_EXECUTED",
+    "baseline_result": "NOT_EXECUTED",
+    "names": [],
+    "artifact_path": ".audit/evidence/BUG-000-tests.log"
+  },
+  "regression_result": "NOT_EXECUTED",
+  "regression": {
+    "scope": "full suite | blast radius only",
+    "baseline_failures": [],
+    "current_failures": [],
+    "accepted_failures": [],
+    "artifact_path": ".audit/evidence/BUG-000-regression.log"
+  },
+  "runtime_result": "NOT_EXECUTED",
+
+  "re_audit": {
+    "result": "NOT_EXECUTED",
+    "audited_commit": "",
+    "finding_still_derived": null,
+    "validation_result_path": ".audit/validation-result.json"
+  },
+
+  "new_candidate_findings": [],
+  "remaining_risks": "",
+  "rollback_procedure": "git checkout <baseline_commit> -- <files>; delete branch fix/BUG-000",
+  "resulting_commit": "",
+  "status": "READY_FOR_FIX",
+  "operator": "",
+  "completed_at": ""
+}

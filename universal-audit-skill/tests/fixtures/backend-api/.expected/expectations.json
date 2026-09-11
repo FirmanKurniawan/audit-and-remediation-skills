@@ -1,0 +1,53 @@
+{
+  "fixture": "backend-api",
+  "expected_platforms": [
+    "backend-api"
+  ],
+  "forbidden_platforms": [
+    "mobile-android",
+    "desktop",
+    "embedded-iot"
+  ],
+  "expected_markers": [
+    "package.json"
+  ],
+  "expected_output_tokens": [
+    "express"
+  ],
+  "expected_standards": [
+    "OWASP ASVS",
+    "OWASP API Security Top 10"
+  ],
+  "seeded_defects": [
+    {
+      "id": "SEEDED-API-1",
+      "marker": "LIKE",
+      "file": "src/server.js",
+      "line": 8,
+      "finding_class": "security",
+      "cwe": "CWE-89",
+      "description": "SQL string concatenation from req.query"
+    },
+    {
+      "id": "SEEDED-API-2",
+      "marker": "no check that req.user owns",
+      "file": "src/server.js",
+      "line": 14,
+      "finding_class": "security",
+      "cwe": "CWE-639",
+      "description": "object-level authorization missing on /notes/:id"
+    }
+  ],
+  "seeded_negatives": [
+    {
+      "file": "src/server.js",
+      "symbol": "/my/notes",
+      "why": "parameterised and scoped to the authenticated user"
+    },
+    {
+      "file": ".env.example",
+      "symbol": "SESSION_SECRET",
+      "why": "placeholder in an example file, not a real secret"
+    }
+  ]
+}

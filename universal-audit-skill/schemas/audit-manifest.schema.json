@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/universal-audit-skill/schemas/audit-manifest.schema.json",
+  "title": "Audit manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project_name",
+    "audit_date",
+    "git",
+    "tier",
+    "components",
+    "standards_selected",
+    "threat_model",
+    "executed_commands"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "audit_date": {
+      "type": "string"
+    },
+    "pipeline_version": {
+      "type": "string"
+    },
+    "git": {
+      "type": "object",
+      "required": [
+        "commit",
+        "branch",
+        "working_tree"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "working_tree": {
+          "enum": [
+            "clean",
+            "dirty",
+            "not-a-repo"
+          ]
+        },
+        "uncommitted_files": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "tier": {
+      "type": "object",
+      "required": [
+        "level",
+        "justification"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "T1",
+            "T2",
+            "T3"
+          ]
+        },
+        "justification": {
+          "type": "string"
+        },
+        "sampling_rule": {
+          "type": "string"
+        },
+        "excluded_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "controlled_execution": {
+          "type": "boolean"
+        },
+        "network_access": {
+          "type": "boolean"
+        },
+        "runtime_environment": {
+          "type": "string"
+        },
+        "recorded_at": {
+          "type": "string"
+        },
+        "granted_by": {
+          "type": "string"
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "path",
+          "platform",
+          "primary_marker",
+          "confidence",
+          "in_scope"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "primary_marker": {
+            "type": "string"
+          },
+          "confidence": {
+            "enum": [
+              "Confirmed",
+              "Likely",
+              "Uncertain"
+            ]
+          },
+          "in_scope": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "standards_selected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "version",
+          "verification_status",
+          "accessed",
+          "applicability"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "accessed": {
+            "type": "string"
+          },
+          "verification_status": {
+            "enum": [
+              "Verified",
+              "Unverified",
+              "Unreachable"
+            ]
+          },
+          "applicability": {
+            "enum": [
+              "Applicable",
+              "Potentially Applicable",
+              "Not Applicable",
+              "Applicability Unconfirmed"
+            ]
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "standards_excluded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "reason"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "threat_model": {
+      "type": "object",
+      "required": [
+        "worst_credible_outcome"
+      ],
+      "properties": {
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entry_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trust_boundaries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "worst_credible_outcome": {
+          "type": "string"
+        }
+      }
+    },
+    "executed_commands": {
+      "$ref": "https://github.com/universal-audit-skill/schemas/command-evidence.schema.json#/$defs/commandList"
+    },
+    "runtime_verifications": {
+      "type": "array",
+      "items": {
+        "$ref": "https://github.com/universal-audit-skill/schemas/command-evidence.schema.json#/$defs/runtimeRecord"
+      }
+    },
+    "not_verified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "release_recommendation": {
+      "enum": [
+        "DO NOT RELEASE",
+        "INTERNAL TESTING ONLY",
+        "CONTROLLED PILOT",
+        "CONDITIONALLY READY",
+        "READY FOR REVIEWED SCOPE",
+        "NOT ASSESSED"
+      ]
+    }
+  }
+}

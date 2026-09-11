@@ -1,0 +1,60 @@
+{
+  "fixture": "android-app",
+  "expected_platforms": [
+    "mobile-android"
+  ],
+  "forbidden_platforms": [
+    "web-frontend",
+    "embedded-iot"
+  ],
+  "expected_markers": [
+    "AndroidManifest.xml",
+    "build.gradle.kts"
+  ],
+  "expected_standards": [
+    "OWASP MASVS",
+    "MASWE",
+    "MASTG"
+  ],
+  "seeded_defects": [
+    {
+      "id": "SEEDED-AND-1",
+      "marker": "usesCleartextTraffic",
+      "file": "app/src/main/AndroidManifest.xml",
+      "line": 6,
+      "finding_class": "security",
+      "cwe": "CWE-319",
+      "description": "usesCleartextTraffic enabled"
+    },
+    {
+      "id": "SEEDED-AND-2",
+      "marker": "allowBackup",
+      "file": "app/src/main/AndroidManifest.xml",
+      "line": 5,
+      "finding_class": "security",
+      "cwe": "CWE-530",
+      "description": "allowBackup true exposes app data to adb backup"
+    },
+    {
+      "id": "SEEDED-AND-3",
+      "marker": "putString(\"bearer\"",
+      "file": "app/src/main/java/com/example/fixture/TokenStore.kt",
+      "line": 8,
+      "finding_class": "security",
+      "cwe": "CWE-922",
+      "description": "bearer token in unencrypted SharedPreferences"
+    }
+  ],
+  "seeded_negatives": [
+    {
+      "file": "app/src/main/AndroidManifest.xml",
+      "symbol": "SettingsActivity",
+      "why": "explicitly not exported"
+    },
+    {
+      "file": "app/src/main/java/com/example/fixture/TokenStore.kt",
+      "symbol": "saveLastTab",
+      "why": "non-sensitive UI state"
+    }
+  ]
+}

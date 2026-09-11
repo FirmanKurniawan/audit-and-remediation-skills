@@ -1,0 +1,49 @@
+{
+  "fixture": "embedded-c",
+  "expected_platforms": [
+    "embedded-iot"
+  ],
+  "forbidden_platforms": [
+    "web-frontend",
+    "backend-api"
+  ],
+  "expected_markers": [
+    "platformio.ini"
+  ],
+  "expected_standards": [
+    "SEI CERT",
+    "CWE Top 25"
+  ],
+  "seeded_defects": [
+    {
+      "id": "SEEDED-EMB-1",
+      "marker": "memcpy(out->data",
+      "file": "src/protocol.c",
+      "line": 10,
+      "finding_class": "security",
+      "cwe": "CWE-787",
+      "description": "memcpy length taken from the wire without bounds check"
+    },
+    {
+      "id": "SEEDED-EMB-2",
+      "marker": "wdt_reset();",
+      "file": "src/watchdog.c",
+      "line": 8,
+      "finding_class": "reliability",
+      "cwe": null,
+      "description": "watchdog fed from a timer ISR independent of task liveness"
+    }
+  ],
+  "seeded_negatives": [
+    {
+      "file": "src/protocol.c",
+      "symbol": "parse_frame_checked",
+      "why": "length validated against the buffer and the wire length"
+    },
+    {
+      "file": "src/watchdog.c",
+      "symbol": "supervisor_task",
+      "why": "feed is conditional on liveness"
+    }
+  ]
+}

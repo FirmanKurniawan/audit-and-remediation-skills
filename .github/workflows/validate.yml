@@ -1,0 +1,89 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+defaults:
+  run:
+    working-directory: universal-audit-skill
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Required files present
+        run: |
+          set -e
+          for f in SKILL.md README.md LICENSE CHANGELOG.md MIGRATION.md \
+                   references/pipeline.md references/evidence-contract.md \
+                   references/fingerprinting.md references/severity-and-confidence.md \
+                   references/command-safety-model.md references/regulatory-applicability.md \
+                   references/runtime-verification.md references/standards-registry.md \
+                   references/standards-selection-matrix.md references/product-frameworks.md \
+                   references/cross-skill-boundary.md references/evidence-rules.md \
+                   templates/BUG_ANALYSIS.template.md \
+                   templates/PRODUCT_FEATURE_ANALYSIS.template.md \
+                   templates/AUDIT_MANIFEST.template.json \
+                   checklists/final-quality-bar.md \
+                   scripts/auditkit.py scripts/quality-gate.py scripts/detect-stack.sh \
+                   tests/run_tests.py tests/make_fixtures.py tests/AGENT_BENCHMARK.md; do
+            [ -f "$f" ] || { echo "missing: $f"; exit 1; }
+          done
+          echo "required files present"
+
+      - name: Remediation skill present
+        working-directory: .
+        run: |
+          set -e
+          for f in universal-remediation-skill/SKILL.md \
+                   universal-remediation-skill/references/pipeline.md \
+                   universal-remediation-skill/scripts/validate-fix.py \
+                   universal-remediation-skill/schemas/fix-record.schema.json; do
+            [ -f "$f" ] || { echo "missing: $f"; exit 1; }
+          done
+          echo "sibling skill present"
+
+      - name: Shell syntax
+        run: bash -n scripts/detect-stack.sh
+
+      - name: Python syntax
+        working-directory: .
+        run: python3 -m compileall -q universal-audit-skill/scripts universal-audit-skill/tests universal-remediation-skill/scripts
+
+      - name: Schemas in sync with the validator
+        run: python3 scripts/generate-schemas.py --check
+
+      - name: Validate JSON
+        run: |
+          python3 - <<'PY'
+          import json, glob
+          for f in glob.glob('schemas/*.json') + glob.glob('templates/*.json'):
+              json.load(open(f)); print('ok', f)
+          PY
+
+      - name: SKILL.md frontmatter
+        working-directory: .
+        run: |
+          for s in universal-audit-skill universal-remediation-skill; do
+            head -1 "$s/SKILL.md" | grep -q '^---$'
+            grep -q '^name:' "$s/SKILL.md"
+            grep -q '^description:' "$s/SKILL.md"
+            grep -q '^version:' "$s/SKILL.md"
+            echo "frontmatter ok: $s"
+          done
+
+      - name: Self-test
+        run: |
+          python3 tests/make_fixtures.py --clean
+          python3 tests/run_tests.py
+
+      - name: Upload test result
+        if: always()
+        working-directory: .
+        uses: actions/upload-artifact@v4
+        with:
+          name: self-test-result
+          path: universal-audit-skill/tests/last-run.json

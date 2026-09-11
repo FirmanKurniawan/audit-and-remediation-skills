@@ -1,0 +1,53 @@
+{
+  "fixture": "web-spa",
+  "expected_platforms": [
+    "web-frontend"
+  ],
+  "forbidden_platforms": [
+    "mobile-android",
+    "mobile-ios",
+    "embedded-iot"
+  ],
+  "expected_markers": [
+    "vite.config.ts",
+    "index.html",
+    "package.json"
+  ],
+  "expected_standards": [
+    "OWASP Top 10:2025",
+    "OWASP ASVS",
+    "WCAG 2.2"
+  ],
+  "seeded_defects": [
+    {
+      "id": "SEEDED-WEB-1",
+      "marker": "dangerouslySetInnerHTML",
+      "file": "src/Comment.tsx",
+      "line": 7,
+      "finding_class": "security",
+      "cwe": "CWE-79",
+      "description": "dangerouslySetInnerHTML fed from a URL parameter"
+    },
+    {
+      "id": "SEEDED-WEB-2",
+      "marker": "localStorage.setItem",
+      "file": "src/auth.ts",
+      "line": 3,
+      "finding_class": "security",
+      "cwe": "CWE-922",
+      "description": "session token stored in localStorage"
+    }
+  ],
+  "seeded_negatives": [
+    {
+      "file": "src/Comment.tsx",
+      "symbol": "SafeComment",
+      "why": "React escapes interpolated text"
+    },
+    {
+      "file": "src/auth.ts",
+      "symbol": "readTheme",
+      "why": "non-sensitive value in web storage"
+    }
+  ]
+}

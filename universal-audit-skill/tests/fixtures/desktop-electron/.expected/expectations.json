@@ -1,0 +1,35 @@
+{
+  "fixture": "desktop-electron",
+  "expected_platforms": [
+    "desktop"
+  ],
+  "forbidden_platforms": [
+    "mobile-android",
+    "embedded-iot"
+  ],
+  "expected_markers": [
+    "electron-builder.yml",
+    "package.json"
+  ],
+  "expected_standards": [
+    "OWASP Desktop App Security Top 10"
+  ],
+  "seeded_defects": [
+    {
+      "id": "SEEDED-DSK-1",
+      "marker": "nodeIntegration: true",
+      "file": "main.js",
+      "line": 8,
+      "finding_class": "security",
+      "cwe": "CWE-693",
+      "description": "nodeIntegration enabled with contextIsolation disabled on a window that loads remote content"
+    }
+  ],
+  "seeded_negatives": [
+    {
+      "file": "help-window.js",
+      "symbol": "helpWindow",
+      "why": "isolated, sandboxed, local preload"
+    }
+  ]
+}

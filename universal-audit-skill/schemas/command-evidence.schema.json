@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/universal-audit-skill/schemas/command-evidence.schema.json",
+  "title": "Command execution and runtime verification evidence",
+  "$defs": {
+    "repoState": {
+      "type": "object",
+      "required": [
+        "commit",
+        "branch",
+        "dirty_files"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "dirty_files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tracked_hash": {
+          "type": "string",
+          "description": "Hash of `git status --porcelain` output."
+        }
+      }
+    },
+    "commandRecord": {
+      "type": "object",
+      "required": [
+        "step",
+        "command",
+        "command_class",
+        "result"
+      ],
+      "properties": {
+        "step": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "command_class": {
+          "enum": [
+            "SAFE_READ_ONLY",
+            "CONTROLLED_EXECUTION",
+            "REQUIRES_CONSENT",
+            "PROHIBITED"
+          ]
+        },
+        "working_directory": {
+          "type": "string"
+        },
+        "environment_assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "result": {
+          "enum": [
+            "Passed",
+            "Passed with warnings",
+            "Partial",
+            "Failed",
+            "Not Executed",
+            "Blocked",
+            "Not Applicable"
+          ]
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "duration_seconds": {
+          "type": "number"
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "repo_state": {
+          "type": "object",
+          "properties": {
+            "before": {
+              "$ref": "#/$defs/repoState"
+            },
+            "after": {
+              "$ref": "#/$defs/repoState"
+            },
+            "source_modified": {
+              "type": "boolean"
+            },
+            "modified_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "source_change_rationale": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "commandList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/commandRecord"
+      }
+    },
+    "runtimeRecord": {
+      "type": "object",
+      "required": [
+        "finding_id",
+        "environment",
+        "timestamp",
+        "command",
+        "result"
+      ],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "pattern": "^BUG-\\d{3,}$"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "device_or_platform": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "command": {
+          "type": "string"
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "expected": {
+          "type": "string"
+        },
+        "observed": {
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "BLOCKED",
+            "NOT_EXECUTED",
+            "INCONCLUSIVE"
+          ]
+        },
+        "artifact_path": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "commands": {
+      "$ref": "#/$defs/commandList"
+    },
+    "runtime_verifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/runtimeRecord"
+      }
+    }
+  }
+}

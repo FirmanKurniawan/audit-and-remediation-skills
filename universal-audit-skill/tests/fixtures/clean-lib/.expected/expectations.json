@@ -1,0 +1,34 @@
+{
+  "fixture": "clean-lib",
+  "expected_platforms": [
+    "cli-library"
+  ],
+  "forbidden_platforms": [
+    "mobile-android",
+    "desktop",
+    "embedded-iot",
+    "web-frontend"
+  ],
+  "expected_markers": [
+    "pyproject.toml"
+  ],
+  "expected_standards": [
+    "CWE",
+    "ISO/IEC 25010",
+    "Sonar way"
+  ],
+  "seeded_defects": [],
+  "seeded_negatives": [
+    {
+      "file": "src/cleanlib/tokenizer.py",
+      "symbol": "docstring",
+      "why": "'password' and 'eval' appear only in prose"
+    },
+    {
+      "file": "src/cleanlib/cache.py",
+      "symbol": "cache_key",
+      "why": "fast digest used for cache bucketing, not for credentials"
+    }
+  ],
+  "note": "Negative control. Any Medium-or-above finding here is a false positive and fails the suite."
+}
