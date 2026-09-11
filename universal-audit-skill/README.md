@@ -29,10 +29,10 @@ evidence ledger with a mandatory verification pass.
 
 ```bash
 # personal skills
-git clone https://github.com/<you>/universal-audit-skill ~/.claude/skills/universal-code-audit
+git clone https://github.com/<you>/universal-audit-skill ~/.claude/skills/universal-audit-skill
 
 # or per-project
-git clone https://github.com/<you>/universal-audit-skill .claude/skills/universal-code-audit
+git clone https://github.com/<you>/universal-audit-skill .claude/skills/universal-audit-skill
 ```
 
 Then just ask: *"Audit this repository."* The skill triggers on audit, security

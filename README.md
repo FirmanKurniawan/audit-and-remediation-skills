@@ -32,8 +32,8 @@ git clone <this-repo> ~/src/audit-skills
 
 # expose both skills to your agent
 mkdir -p ~/.claude/skills
-ln -s ~/src/audit-skills/universal-audit-skill        ~/.claude/skills/universal-code-audit
-ln -s ~/src/audit-skills/universal-remediation-skill  ~/.claude/skills/universal-remediation
+ln -s ~/src/audit-skills/universal-audit-skill        ~/.claude/skills/universal-audit-skill
+ln -s ~/src/audit-skills/universal-remediation-skill  ~/.claude/skills/universal-remediation-skill
 ```
 
 Symlinks keep the two side by side on disk, which the sibling-path lookups

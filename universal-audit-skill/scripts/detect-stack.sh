@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Read-only stack fingerprinting for the universal-code-audit skill.
+# Read-only stack fingerprinting for the universal-audit-skill.
 # Prints hints only. Phase 1 must verify every hint by opening the file.
 # It never writes, installs, or modifies anything.
 
